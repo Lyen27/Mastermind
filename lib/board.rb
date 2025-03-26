@@ -4,7 +4,7 @@ class Board
   def initialize
     @state = Array.new(12) {Array.new(4) {'grey'}}
     @output = Array.new(12) {Array.new(4) {'grey'}}
-    @code = %w[red red blue blue]
+    @code = %w[red yellow blue green]
   end
 
   def render
@@ -40,32 +40,32 @@ class Board
   end
   
   def check_guess(guess,row)
-    arr = code.map {|element| element}
-    apply_correction = false
-    (0..3).each do |code_index| #why it doesn't work with arr.each?
-      code_index -= 1 if apply_correction
-      apply_correction = false
-        if arr[code_index] == guess[code_index]
-          apply_correction = true
-          arr.delete_at(code_index)
-          guess.delete_at(code_index)
+    i = -1
+    arr = code.filter do |code_color| # i has to be incremented after first iteration
+      i = i + 1 
+      code_color == guess[i]
+    end
+    p arr
+    (arr.length).times do
+      random = rand(4)
+      while output[row][random] != 'grey'
+        random = rand(4)
+      end
+      output[row][random] = 'red'
+    end
+    diff = [code - arr, guess - arr]
+    diff[0].each do |code_color|
+      diff[1].each do |color|
+        if code_color == color
           random = rand(4)
-          output[row][code_index] = 'red'
+          while output[row][random] != 'grey'
+            random = rand(4)
+          end
+          output[row][random] = 'white'
+          break
         end
       end
-     p arr
-     p guess
-     (0..(arr.length - 1)).each do |code_index| #why it doesn't work with arr.each?
-      code_index -= 1 if apply_correction
-      apply_correction = false
-        if arr[code_index] == guess[code_index]
-          apply_correction = true
-          arr.delete_at(code_index)
-          guess.delete_at(code_index)
-          random = rand(4)
-          output[row][code_index] = 'white'
-        end
-      end
+    end
   end
 
 end
