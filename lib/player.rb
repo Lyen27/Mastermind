@@ -8,7 +8,7 @@ class Player
   def play(move,row,board)
     position = move[1].to_i
     color = move[0]
-    guess << color
+    guess << [color,position - 1]
     board[row][position - 1] = color
   end
 end
