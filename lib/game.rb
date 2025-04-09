@@ -21,24 +21,28 @@ class Game
       board.render
     end
   end
+
+  def reset_turn
+    player.guess = []
+  end
   
   def start_turn
     puts 'Pick a color between green, blue, yellow, purple, red and white and then pick a position, for example: red,2'
     fill_row
-    board.check_guess(player.guess,row)
+    board.check_guess(row)
     board.render
-    player.guess = []
+    reset_turn
     self.win = true if board.output[row] == %w[red red red red]
     self.row += 1
   end
 
   def start_game
     while win == false
-      start_turn
-      if row == 12
+      if row > 11
         puts "The code maker won this time, the code was #{board.render_code}"
         return
       end
+      start_turn
     end
     puts 'Congratulations!, you cracked the code'
   end

@@ -53,15 +53,22 @@ class Board
     end
     line
   end
-
-  def check_guess(guess,row)
+  
+  def check_guess(row)
     i = -1
     p = -1
+    q = -1
     position_array = code.map do |color|
       p = p + 1
       [color,p]
     end
-    arr = position_array.filter do |code_color| # i has to be incremented after first iteration
+
+    guess = state[row].map do |color|
+      q = q + 1
+      [color,q]
+    end
+  
+    arr = position_array.filter do |code_color| 
       i = i + 1 
       code_color == guess[i]
     end
