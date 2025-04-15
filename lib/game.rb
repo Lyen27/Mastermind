@@ -6,32 +6,27 @@ require_relative 'input'
 
 class Game
   include Input
-  attr_reader :board, :player
+  attr_reader :board, :player, :mode
   attr_accessor :row, :win
   def initialize
     @board = Board.new
     @player = Player.new
     @row = 0
     @win = false
+    @mode = pick_mode
   end
 
   def fill_row
     while board.state[row].any?('grey')
-      player.play(get_player_move,row,board.state)
+      player.play(get_player_move(mode),board.state[row])
       board.render
     end
   end
-
-  def reset_turn
-    player.guess = []
-  end
   
   def start_turn
-    puts 'Pick a color between green, blue, yellow, purple, red and white and then pick a position, for example: red,2'
     fill_row
-    board.check_guess(row)
+    board.check_guess(board.code,board.state[row],board.output[row])
     board.render
-    reset_turn
     self.win = true if board.output[row] == %w[red red red red]
     self.row += 1
   end

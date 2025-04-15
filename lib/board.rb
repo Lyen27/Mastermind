@@ -4,7 +4,7 @@ class Board
   def initialize
     @state = Array.new(12) {Array.new(4) {'grey'}}
     @output = Array.new(12) {Array.new(4) {'grey'}}
-    @code = generate_color_code
+    @code = Array.new(4,'grey') 
   end
 
   def render
@@ -53,31 +53,29 @@ class Board
     end
     line
   end
-  
-  def check_guess(row)
-    i = -1
-    p = -1
-    q = -1
-    position_array = code.map do |color|
-      p = p + 1
-      [color,p]
-    end
 
-    guess = state[row].map do |color|
+  def format_array(arr)
+    q = -1
+    arr.map do |color|
       q = q + 1
       [color,q]
     end
+  end
+
+  def check_guess(code,guess,feedback)
   
-    arr = position_array.filter do |code_color| 
-      i = i + 1 
-      code_color == guess[i]
-    end
+    position_array = format_array(code)
+
+    guess = format_array(guess)
+
+    arr = position_array & guess
+
     (arr.length).times do
       random = rand(4)
-      while output[row][random] != 'grey'
+      while feedback[random] != 'grey'
         random = rand(4)
       end
-      output[row][random] = 'red'
+      feedback[random] = 'red'
     end
     diff = [position_array - arr, guess - arr]
     diff[0].each do |code_color|
@@ -85,10 +83,10 @@ class Board
         if code_color[0] == color[0]
           color[0] = nil
           random = rand(4)
-          while output[row][random] != 'grey'
+          while feedback[random] != 'grey'
             random = rand(4)
           end
-          output[row][random] = 'white'
+          feedback[random] = 'white'
           break
         end
       end

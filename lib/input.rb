@@ -1,7 +1,17 @@
 module Input
-  def get_player_move
-    move = validate_input(gets.chomp)
-    move.split(',')
+  def get_player_move(mode)
+    case mode
+      when 'codebreaker'
+        puts 'Pick a color between green, blue, yellow, purple, red and white and then pick a position, for example: red,2'
+        if row == 0
+          board.code = board.generate_color_code
+        end
+        move = validate_input(gets.chomp) 
+      when 'codemaker'
+        set_code
+        move = computer_input
+    end
+    move
   end
 
   def validate_input(input)
@@ -18,6 +28,20 @@ module Input
       puts "that's an invalid choice, try again"
       input = gets.chomp
     end
-    input
+    input.split(',')
+  end
+
+  def pick_mode
+    puts 'choose if you want to play as codemaker or codebreaker'
+    gets.chomp
+  end
+  def set_code
+    while board.code.any?('grey')
+      player.play(validate_input(gets.chomp),board.code)
+    end
+  end
+
+  def computer_input
+    
   end
 end
