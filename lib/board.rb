@@ -55,7 +55,7 @@ class Board
   end
 
   def format_array(arr)
-    q = -1
+    q = 0
     arr.map do |color|
       q = q + 1
       [color,q]
@@ -63,30 +63,27 @@ class Board
   end
 
   def check_guess(code,guess,feedback)
-  
+    
     position_array = format_array(code)
 
     guess = format_array(guess)
-
+    
     arr = position_array & guess
 
-    (arr.length).times do
-      random = rand(4)
-      while feedback[random] != 'grey'
-        random = rand(4)
-      end
-      feedback[random] = 'red'
+    (arr.length).times do |i|
+      feedback[i] = 'red'
     end
+
     diff = [position_array - arr, guess - arr]
     diff[0].each do |code_color|
       diff[1].each do |color|
         if code_color[0] == color[0]
           color[0] = nil
-          random = rand(4)
-          while feedback[random] != 'grey'
-            random = rand(4)
+          i = 0
+          while feedback[i] != 'grey'
+            i = i + 1
           end
-          feedback[random] = 'white'
+          feedback[i] = 'white'
           break
         end
       end
