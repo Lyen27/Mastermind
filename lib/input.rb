@@ -43,7 +43,6 @@ module Input
       self.computer_guess = board.format_array(new_set[0])
       input = computer_guess.shift
     end
-    p code_set.length
     input
   end
 
