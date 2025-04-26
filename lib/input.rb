@@ -28,7 +28,13 @@ module Input
 
   def pick_mode
     puts 'choose if you want to play as codemaker or codebreaker'
-    gets.chomp
+    validate_mode = %w[codemaker codebreaker]
+    mode = gets.chomp
+    while !validate_mode.include?(mode)
+      puts "That's an invalid mode"
+      mode = gets.chomp
+    end
+    mode
   end
   def set_code
     while board.code.any?('grey')
